@@ -3,7 +3,7 @@
   "version": "0.0.1",
   "repository": {
     "type": "git",
-    "url": "git@github.com:lukasbach/monaco-editor-auto-typings.git"
+    "url": "git@github.com:dilan-dio4/monaco-editor-auto-typings.git"
   },
   "author": "Lukas Bach",
   "license": "MIT",
