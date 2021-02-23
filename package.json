@@ -26,6 +26,6 @@
     "copy": "^0.3.2"
   },
   "workspaces": [
-    "packages/*"
+    "packages/core"
   ]
 }

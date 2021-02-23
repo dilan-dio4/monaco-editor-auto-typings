@@ -1,11 +1,13 @@
-import { editor, IDisposable, languages } from 'monaco-editor';
+// import { editor, IDisposable, languages } from 'monaco-editor';
+import { IDisposable, editor, languages } from "@typescript-deploys/monaco-editor";
 import { SourceCache } from './SourceCache';
 import { Options } from './Options';
 import { DummySourceCache } from './DummySourceCache';
 import { UnpkgSourceResolver } from './UnpkgSourceResolver';
 import { ImportResolver } from './ImportResolver';
 import * as path from 'path';
-import * as monaco from 'monaco-editor';
+// import * as monaco from 'monaco-editor';
+import Monaco from "@typescript-deploys/monaco-editor";
 import { invokeUpdate } from './invokeUpdate';
 import { RecursionDepth } from './RecursionDepth';
 
@@ -16,7 +18,7 @@ export class AutoTypings implements IDisposable {
   private isResolving?: boolean;
   private disposables: IDisposable[];
 
-  private constructor(private editor: editor.ICodeEditor, private options: Options) {
+  private constructor(private editor: editor.ICodeEditor, monaco: typeof Monaco, private options: Options) {
     this.disposables = [];
     this.importResolver = new ImportResolver(options);
     const changeModelDisposable = editor.onDidChangeModelContent(e => {
@@ -33,12 +35,12 @@ export class AutoTypings implements IDisposable {
     }
   }
 
-  public static create(editor: editor.ICodeEditor, options?: Partial<Options>): AutoTypings {
+  public static create(editor: editor.ICodeEditor, monaco: typeof Monaco, options?: Partial<Options>): AutoTypings {
     if (options?.shareCache && options.sourceCache && !AutoTypings.sharedCache) {
       AutoTypings.sharedCache = options.sourceCache;
     }
 
-    return new AutoTypings(editor, {
+    return new AutoTypings(editor, monaco, {
       fileRootPath: 'inmemory://model/',
       onlySpecifiedPackages: false,
       preloadPackages: false,

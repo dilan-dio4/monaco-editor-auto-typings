@@ -1,7 +1,9 @@
-import * as monaco from 'monaco-editor/esm/vs/editor/editor.api';
+// import * as monaco from 'monaco-editor/esm/vs/editor/editor.api';
+import * as monaco from '@typescript-deploys/monaco-editor';
 import { Options } from './Options';
 import { SourceCache } from './SourceCache';
-import { Uri } from 'monaco-editor/esm/vs/editor/editor.api';
+// import { Uri } from 'monaco-editor/esm/vs/editor/editor.api';
+import { Uri } from '@typescript-deploys/monaco-editor';
 import { DummySourceCache } from './DummySourceCache';
 import { UnpkgSourceResolver } from './UnpkgSourceResolver';
 import { DependencyParser } from './DependencyParser';
