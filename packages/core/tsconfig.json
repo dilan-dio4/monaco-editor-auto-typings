@@ -3,7 +3,8 @@
   "extends": "../../config/tsconfig.json",
   "compilerOptions": {
     "outDir": "lib",
-    "declaration": true
+    "declaration": true,
+    "typeRoots": ["types"]
   },
-  "include": ["./src", "./webpack.config.ts", "src/monaco.d.ts"]
+  "include": ["./src", "./webpack.config.ts", "types/path.d.ts", "types/monaco.d.ts"]
 }

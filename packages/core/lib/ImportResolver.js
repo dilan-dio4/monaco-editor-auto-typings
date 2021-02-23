@@ -92,17 +92,17 @@ var __read = (this && this.__read) || function (o, n) {
     }
     return ar;
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.ImportResolver = void 0;
-// import * as monaco from 'monaco-editor/esm/vs/editor/editor.api';
-var monaco = __importStar(require("@typescript-deploys/monaco-editor"));
-// import { Uri } from 'monaco-editor/esm/vs/editor/editor.api';
-var monaco_editor_1 = require("@typescript-deploys/monaco-editor");
 var DependencyParser_1 = require("./DependencyParser");
 var ImportResourcePath_1 = require("./ImportResourcePath");
 var path = __importStar(require("path"));
 var invokeUpdate_1 = require("./invokeUpdate");
 var RecursionDepth_1 = require("./RecursionDepth");
+var Globals_1 = __importDefault(require("./Globals"));
 var ImportResolver = /** @class */ (function () {
     function ImportResolver(options) {
         var e_1, _a;
@@ -221,7 +221,7 @@ var ImportResolver = /** @class */ (function () {
                     case 0: return [4 /*yield*/, this.loadSourceFileContents(importResource)];
                     case 1:
                         _a = _b.sent(), source = _a.source, at = _a.at;
-                        this.createModel(source, monaco_editor_1.Uri.parse(this.options.fileRootPath + path.join("node_modules/" + importResource.packageName, at)));
+                        this.createModel(source, Globals_1.default.monacoRef.Uri.parse(this.options.fileRootPath + path.join("node_modules/" + importResource.packageName, at)));
                         return [4 /*yield*/, this.resolveImportsInFile(source, {
                                 kind: 'relative-in-package',
                                 packageName: importResource.packageName,
@@ -261,7 +261,7 @@ var ImportResolver = /** @class */ (function () {
                         pkg = JSON.parse(pkgJson);
                         if (!(pkg.typings || pkg.types)) return [3 /*break*/, 2];
                         typings = pkg.typings || pkg.types;
-                        this.createModel(pkgJson, monaco_editor_1.Uri.parse(this.options.fileRootPath + "node_modules/" + importResource.packageName + "/package.json"));
+                        this.createModel(pkgJson, Globals_1.default.monacoRef.Uri.parse(this.options.fileRootPath + "node_modules/" + importResource.packageName + "/package.json"));
                         invokeUpdate_1.invokeUpdate({
                             type: 'LookedUpPackage',
                             package: importResource.packageName,
@@ -286,7 +286,7 @@ var ImportResolver = /** @class */ (function () {
                             pkg_1 = JSON.parse(pkgJsonTypings);
                             if (pkg_1.typings || pkg_1.types) {
                                 typings = pkg_1.typings || pkg_1.types;
-                                this.createModel(pkgJsonTypings, monaco_editor_1.Uri.parse(this.options.fileRootPath + "node_modules/" + typingPackageName + "/package.json"));
+                                this.createModel(pkgJsonTypings, Globals_1.default.monacoRef.Uri.parse(this.options.fileRootPath + "node_modules/" + typingPackageName + "/package.json"));
                                 invokeUpdate_1.invokeUpdate({
                                     type: 'LookedUpPackage',
                                     package: typingPackageName,

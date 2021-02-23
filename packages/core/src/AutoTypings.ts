@@ -1,5 +1,4 @@
 // import { editor, IDisposable, languages } from 'monaco-editor';
-import { IDisposable, editor, languages } from "@typescript-deploys/monaco-editor";
 import { SourceCache } from './SourceCache';
 import { Options } from './Options';
 import { DummySourceCache } from './DummySourceCache';
@@ -7,18 +6,19 @@ import { UnpkgSourceResolver } from './UnpkgSourceResolver';
 import { ImportResolver } from './ImportResolver';
 import * as path from 'path';
 // import * as monaco from 'monaco-editor';
-import Monaco from "@typescript-deploys/monaco-editor";
 import { invokeUpdate } from './invokeUpdate';
 import { RecursionDepth } from './RecursionDepth';
+import Globals from "./Globals";
 
-export class AutoTypings implements IDisposable {
+export class AutoTypings implements monaco.IDisposable {
   private static sharedCache?: SourceCache;
   private importResolver: ImportResolver;
   private debounceTimer?: number;
   private isResolving?: boolean;
-  private disposables: IDisposable[];
+  private disposables: monaco.IDisposable[];
 
-  private constructor(private editor: editor.ICodeEditor, monaco: typeof Monaco, private options: Options) {
+  private constructor(private editor: monaco.editor.ICodeEditor, monaco: any, private options: Options) {
+
     this.disposables = [];
     this.importResolver = new ImportResolver(options);
     const changeModelDisposable = editor.onDidChangeModelContent(e => {
@@ -29,17 +29,19 @@ export class AutoTypings implements IDisposable {
     if (!options.dontAdaptEditorOptions) {
       monaco.languages.typescript.typescriptDefaults.setCompilerOptions({
         ...monaco.languages.typescript.typescriptDefaults.getCompilerOptions(),
-        moduleResolution: languages.typescript.ModuleResolutionKind.NodeJs,
+        moduleResolution: 2,
         allowSyntheticDefaultImports: true,
       });
     }
   }
 
-  public static create(editor: editor.ICodeEditor, monaco: typeof Monaco, options?: Partial<Options>): AutoTypings {
+  public static create(editor: monaco.editor.ICodeEditor, monaco: any, options?: Partial<Options>): AutoTypings {
     if (options?.shareCache && options.sourceCache && !AutoTypings.sharedCache) {
       AutoTypings.sharedCache = options.sourceCache;
     }
 
+    Globals.monacoRef = monaco;
+    
     return new AutoTypings(editor, monaco, {
       fileRootPath: 'inmemory://model/',
       onlySpecifiedPackages: false,

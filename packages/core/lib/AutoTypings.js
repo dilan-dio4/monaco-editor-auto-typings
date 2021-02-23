@@ -76,16 +76,19 @@ var __values = (this && this.__values) || function(o) {
     };
     throw new TypeError(s ? "Object is not iterable." : "Symbol.iterator is not defined.");
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.AutoTypings = void 0;
-// import { editor, IDisposable, languages } from 'monaco-editor';
-var monaco_editor_1 = require("@typescript-deploys/monaco-editor");
 var DummySourceCache_1 = require("./DummySourceCache");
 var UnpkgSourceResolver_1 = require("./UnpkgSourceResolver");
 var ImportResolver_1 = require("./ImportResolver");
 var path = __importStar(require("path"));
+// import * as monaco from 'monaco-editor';
 var invokeUpdate_1 = require("./invokeUpdate");
 var RecursionDepth_1 = require("./RecursionDepth");
+var Globals_1 = __importDefault(require("./Globals"));
 var AutoTypings = /** @class */ (function () {
     function AutoTypings(editor, monaco, options) {
         var _this = this;
@@ -99,7 +102,7 @@ var AutoTypings = /** @class */ (function () {
         this.disposables.push(changeModelDisposable);
         this.resolveContents();
         if (!options.dontAdaptEditorOptions) {
-            monaco.languages.typescript.typescriptDefaults.setCompilerOptions(__assign(__assign({}, monaco.languages.typescript.typescriptDefaults.getCompilerOptions()), { moduleResolution: monaco_editor_1.languages.typescript.ModuleResolutionKind.NodeJs, allowSyntheticDefaultImports: true }));
+            monaco.languages.typescript.typescriptDefaults.setCompilerOptions(__assign(__assign({}, monaco.languages.typescript.typescriptDefaults.getCompilerOptions()), { moduleResolution: 2, allowSyntheticDefaultImports: true }));
         }
     }
     AutoTypings.create = function (editor, monaco, options) {
@@ -107,6 +110,7 @@ var AutoTypings = /** @class */ (function () {
         if ((options === null || options === void 0 ? void 0 : options.shareCache) && options.sourceCache && !AutoTypings.sharedCache) {
             AutoTypings.sharedCache = options.sourceCache;
         }
+        Globals_1.default.monacoRef = monaco;
         return new AutoTypings(editor, monaco, __assign({ fileRootPath: 'inmemory://model/', onlySpecifiedPackages: false, preloadPackages: false, shareCache: false, dontAdaptEditorOptions: false, dontRefreshModelValueAfterResolvement: false, sourceCache: (_a = AutoTypings.sharedCache) !== null && _a !== void 0 ? _a : new DummySourceCache_1.DummySourceCache(), sourceResolver: new UnpkgSourceResolver_1.UnpkgSourceResolver(), debounceDuration: 4000, fileRecursionDepth: 10, packageRecursionDepth: 3 }, options));
     };
     AutoTypings.prototype.dispose = function () {

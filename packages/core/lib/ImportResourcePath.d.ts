@@ -15,4 +15,4 @@ export interface ImportResourcePathRelativeInPackage {
     sourcePath: string;
 }
 export declare type ImportResourcePath = ImportResourcePathPackage | ImportResourcePathRelative | ImportResourcePathRelativeInPackage;
-export declare const importResourcePathToString: (p: ImportResourcePath) => string;
+export declare const importResourcePathToString: (p: ImportResourcePath) => any;

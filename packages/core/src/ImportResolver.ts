@@ -1,9 +1,7 @@
 // import * as monaco from 'monaco-editor/esm/vs/editor/editor.api';
-import * as monaco from '@typescript-deploys/monaco-editor';
 import { Options } from './Options';
 import { SourceCache } from './SourceCache';
 // import { Uri } from 'monaco-editor/esm/vs/editor/editor.api';
-import { Uri } from '@typescript-deploys/monaco-editor';
 import { DummySourceCache } from './DummySourceCache';
 import { UnpkgSourceResolver } from './UnpkgSourceResolver';
 import { DependencyParser } from './DependencyParser';
@@ -17,6 +15,7 @@ import { SourceResolver } from './SourceResolver';
 import * as path from 'path';
 import { invokeUpdate } from './invokeUpdate';
 import { RecursionDepth } from './RecursionDepth';
+import Globals from "./Globals";
 
 export class ImportResolver {
   private loadedFiles: string[];
@@ -92,7 +91,7 @@ export class ImportResolver {
     const { source, at } = await this.loadSourceFileContents(importResource);
     this.createModel(
       source,
-      Uri.parse(this.options.fileRootPath + path.join(`node_modules/${importResource.packageName}`, at))
+      Globals.monacoRef.Uri.parse(this.options.fileRootPath + path.join(`node_modules/${importResource.packageName}`, at))
     );
     await this.resolveImportsInFile(
       source,
@@ -134,7 +133,7 @@ export class ImportResolver {
         const typings = pkg.typings || pkg.types;
         this.createModel(
           pkgJson,
-          Uri.parse(`${this.options.fileRootPath}node_modules/${importResource.packageName}/package.json`)
+          Globals.monacoRef.Uri.parse(`${this.options.fileRootPath}node_modules/${importResource.packageName}/package.json`)
         );
         invokeUpdate(
           {
@@ -165,7 +164,7 @@ export class ImportResolver {
             const typings = pkg.typings || pkg.types;
             this.createModel(
               pkgJsonTypings,
-              Uri.parse(`${this.options.fileRootPath}node_modules/${typingPackageName}/package.json`)
+              Globals.monacoRef.Uri.parse(`${this.options.fileRootPath}node_modules/${typingPackageName}/package.json`)
             );
             invokeUpdate(
               {
@@ -274,7 +273,7 @@ export class ImportResolver {
     });
   }
 
-  private createModel(source: string, uri: Uri) {
+  private createModel(source: string, uri: monaco.Uri) {
     uri = uri.with({ path: uri.path.replace('@types/', '') });
     monaco.editor.createModel(source, 'typescript', uri);
     this.newImportsResolved = true;
